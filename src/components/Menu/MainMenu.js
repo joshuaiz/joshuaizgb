@@ -1,31 +1,35 @@
-import React, { Component } from 'react'
-import { StaticQuery, graphql } from 'gatsby'
-import Link from 'gatsby-link'
+import React from 'react'
+import { StaticQuery, graphql, Link } from 'gatsby'
+import './MainMenu.scss'
 
 const MainMenu = ({ data }) => {
-    console.log(data)
+    // console.log(data)
+    const menu = data.allWordpressWpApiMenusMenusItems.edges[1].node.items
+    console.log(menu)
     return (
-        <div>
-            <h1>Main Menu</h1>
-            <ul>
-                {data.allWordpressWpApiMenusMenusItems.edges[1].node.items.map(
-                    item => (
-                        <li key={item.object_slug}>
-                            {item.object_slug === 'design' ? (
-                                <a href="https://studio.bio" target="blank">
-                                    Design
-                                </a>
-                            ) : (
-                                <Link to={item.object_slug}>{item.title}</Link>
-                            )}
-                        </li>
-                    )
-                )}
+        <nav className="primary-nav">
+            <ul className="main-menu">
+                {menu.map(item => (
+                    <li
+                        key={`${item.object_slug}-${item.object_id}`}
+                        id={`${item.object_slug}-${item.object_id}`}
+                    >
+                        {item.object_slug === 'design' ? (
+                            <a href="https://studio.bio" target="blank">
+                                Design
+                            </a>
+                        ) : (
+                            <Link to={item.object_slug}>{item.title}</Link>
+                        )}
+                    </li>
+                ))}
             </ul>
-        </div>
+        </nav>
     )
 }
 
+// Use StaticQuery to grab the menu(s) here where we need them
+// See here: https://www.gatsbyjs.org/docs/static-query/
 export default props => (
     <StaticQuery
         query={graphql`
@@ -39,6 +43,7 @@ export default props => (
                                 title
                                 url
                                 object_slug
+                                object_id
                             }
                         }
                     }
@@ -48,53 +53,3 @@ export default props => (
         render={data => <MainMenu data={data} />}
     />
 )
-
-// console.log(menu)
-// const data = menu.allWordpressWpApiMenusMenusItems.edges[1].node.items
-//     return (
-//         <div>Main Menu</div>
-//         // <div>
-//         //     <h1>Main Menu</h1>
-//         //     <ul>
-//         //         {data.map(item => (
-//         //             <li key={item.object_slug}>
-//         //                 {item.object_slug === 'design' ? (
-//         //                     <a href="https://studio.bio" target="blank">
-//         //                         Design
-//         //                     </a>
-//         //                 ) : (
-//         //                     <Link to={item.object_slug}>{item.title}</Link>
-//         //                 )}
-//         //             </li>
-//         //         ))}
-//         //     </ul>
-//         // </div>
-//     )
-// }
-
-// class MainMenu extends Component {
-//     render() {
-//         const data = this.props.menu.allWordpressWpApiMenusMenusItems.edges[1]
-//             .node.items
-//         console.log(data)
-
-//         return (
-//             <div>
-//                 <h1>Main Menu</h1>
-//                 <ul>
-//                     {data.map(item => (
-//                         <li key={item.object_slug}>
-//                             {item.object_slug === 'design' ? (
-//                                 <a href="https://studio.bio" target="blank">
-//                                     Design
-//                                 </a>
-//                             ) : (
-//                                 <Link to={item.object_slug}>{item.title}</Link>
-//                             )}
-//                         </li>
-//                     ))}
-//                 </ul>
-//             </div>
-//         )
-//     }
-// }

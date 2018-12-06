@@ -1,16 +1,23 @@
-import React, { Component } from 'react'
+import React from 'react'
+import Parser from 'html-react-parser'
 import { graphql } from 'gatsby'
-import Layout from '../layouts'
+import Layout from '../layouts/DefaultLayout'
 
 const PageTemplate = ({ data }) => {
-    const siteMetadata = data.site.siteMetadata
     const currentPage = data.wordpressPage
 
     return (
         <Layout>
-            <h3 dangerouslySetInnerHTML={{ __html: siteMetadata.title }} />
-            <h3 dangerouslySetInnerHTML={{ __html: currentPage.title }} />
-            <div dangerouslySetInnerHTML={{ __html: currentPage.content }} />
+            <article className="type-page hentry">
+                <header className="article-header">
+                    <h1 className="page-title">{Parser(currentPage.title)}</h1>
+                    <div className="byline post-date">{currentPage.date}</div>
+                </header>
+                <section className="entry-content">
+                    {Parser(currentPage.content)}
+                </section>
+                <footer className="article-footer">{null}</footer>
+            </article>
         </Layout>
     )
 }

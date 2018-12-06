@@ -2,14 +2,14 @@ import React from 'react'
 import { graphql, Link } from 'gatsby'
 import Parser from 'html-react-parser'
 import PropTypes from 'prop-types'
-import Layout from '../layouts/DefaultLayout'
+import Layout from '../../layouts/DefaultLayout'
 
 const PostsTemplate = ({ data }) => {
     const postUrl = 'post/'
 
     return (
         <Layout>
-            <h1>Posts</h1>
+            <h1 className="page-title">Posts</h1>
 
             <ul className="nostyle">
                 {data.allWordpressPost.edges.map(({ node }) => (
@@ -35,13 +35,13 @@ const PostsTemplate = ({ data }) => {
 }
 
 PostsTemplate.propTypes = {
-    data: PropTypes.object.isRequired
+    // data: PropTypes.object.isRequired
 }
 
 export default PostsTemplate
 
 export const pageQuery = graphql`
-    query wordsQuery {
+    query postsQuery {
         allWordpressPost {
             edges {
                 node {
@@ -49,6 +49,11 @@ export const pageQuery = graphql`
                     title
                     excerpt
                     slug
+                    categories {
+                        id
+                        name
+                        slug
+                    }
                     date(formatString: "MMMM DD, YYYY")
                 }
             }

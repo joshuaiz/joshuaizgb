@@ -1,33 +1,39 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
+import Parser from 'html-react-parser'
 import PropTypes from 'prop-types'
-import Layout from '../layouts'
+import PostHeader from '../components/PostHeader/PostHeader'
+import Layout from '../layouts/DefaultLayout'
+import './post.scss'
 
 const PostTemplate = ({ data }) => {
     const post = data.wordpressPost
 
+    console.log(post)
+
     return (
         <Layout>
-            <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            <article
+                className={`type-post hentry post-${post.id} post-${
+                    post.wordpress_id
+                }`}
+            >
+                <PostHeader post={post} />
+                <section className="entry-content">
+                    {post.featured_media && (
+                        <div className="post-image">
+                            <img
+                                src={post.featured_media.source_url}
+                                alt={post.featured_media.alt_text}
+                            />
+                        </div>
+                    )}
+                    <div className="post-content">{Parser(post.content)}</div>
+                </section>
+            </article>
         </Layout>
     )
 }
-
-// class PostTemplate extends Component {
-//     render() {
-//         const post = this.props.data.wordpressPost
-
-//         console.log(post)
-
-//         return (
-//             <div>
-//                 <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-//                 <div dangerouslySetInnerHTML={{ __html: post.content }} />
-//             </div>
-//         )
-//     }
-// }
 
 PostTemplate.propTypes = {
     data: PropTypes.object.isRequired
@@ -38,10 +44,21 @@ export default PostTemplate
 export const pageQuery = graphql`
     query($id: String!) {
         wordpressPost(id: { eq: $id }) {
+            id
+            wordpress_id
             title
+            date(formatString: "MMMM DD, YYYY")
+            author {
+                name
+                link
+            }
             categories {
                 slug
                 name
+            }
+            featured_media {
+                source_url
+                alt_text
             }
             content
         }

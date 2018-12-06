@@ -14,11 +14,16 @@ module.exports = `
         allWordpressPost {
             edges {
                 node {
-                    id  
+                    id
+                    wordpress_id
                     slug
                     status
                     template
                     format
+                    title
+                    date(formatString: "MMMM DD, YYYY")
+                    excerpt
+                    content
                 }
             }
         }
