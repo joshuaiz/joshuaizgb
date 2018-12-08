@@ -10,8 +10,8 @@ const NavLink = ({ test, url, text }) => {
     return <span>{text}</span>
 }
 
-const IndexPage = ({ pathContext }) => {
-    const { group, index, first, last, pageCount } = pathContext
+const IndexPage = ({ pageContext }) => {
+    const { group, index, first, last, pageCount } = pageContext
     const previousUrl = index - 1 === 1 ? '' : (index - 1).toString()
     const nextUrl = (index + 1).toString()
 
